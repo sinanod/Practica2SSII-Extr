@@ -13,6 +13,8 @@ from fpdf import FPDF
 from flask import Flask, render_template, request,redirect, session, app
 from matplotlib import pyplot as plt
 
+app = Flask(__name__)
+
 fLegal = open('legal.json')
 fUsers = open('users.json')
 dataLegal = json.load(fLegal)
