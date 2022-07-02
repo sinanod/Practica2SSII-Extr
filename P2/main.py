@@ -11,8 +11,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 from fpdf import FPDF
 from flask import Flask, render_template, request,redirect, session, app
-
-
+from matplotlib import pyplot as plt
 
 fLegal = open('legal.json')
 fUsers = open('users.json')
@@ -347,7 +346,7 @@ def topUssersCrit():
     probNum = request.form.get('porcentaje',default='0')
     if(num==''):
         num = 10
-    df_critico = pandas.DataFrame()
+    dfCritico = pandas.DataFrame()
 
     con = sqlite3.connect('PRACTICA1.DB')
     cursor = con.cursor()
@@ -366,9 +365,9 @@ def topUssersCrit():
     for i in range(len(rows)):
         nombre += [rows[i][0]]
         prob += [rows[i][1]]
-    df_critico['Nombre'] = nombre
-    df_critico['Probabilidad de Click'] = prob
-    fig = px.bar(df_critico, x=df_critico['Nombre'], y=df_critico['Probabilidad de Click'])
+    dfCritico['Nombre'] = nombre
+    dfCritico['Probabilidad de Click'] = prob
+    fig = px.bar(dfCritico, x=dfCritico['Nombre'], y=dfCritico['Probabilidad de Click'])
     a = plotly.utils.PlotlyJSONEncoder
     graphJSONUno = json.dumps(fig, cls=a)
     pdf = PDF(orientation='P', unit='mm', format='A4')
@@ -441,4 +440,77 @@ def topWebsVuln():
     pdf.output('static/topPaginasVulnerables.pdf', 'F')
     return render_template('topPaginasVulnerables.html', graphJSON=graphJSON)
 
+def ejerCuatro():
+    page = requests.get("https://cve.circl.lu/api/last")
+    jsons = page.json()
+    lista1 = []
+    lista2 = []
+    for i in range(0,10):
+        lista1 += [jsons[i]['id']]
+        lista2 += [jsons[i]['summary']]
+    fig = go.Figure(data=[go.Table(header=dict(values=['Vulnerability','Description']),cells=dict(values=[lista1,lista2]))])
+    table = plotly.io.to_html(fig)
+    return render_template('Ultimas10Vulnerabilidades.html',tableHTML=table)
+
+@app.route('/ej4a')
+def ej4a():
+    fig = px.bar(dfCritico, x=dfCritico['Nombre'], y=dfCritico['Probabilidad de Click'])
+    a = plotly.utils.PlotlyJSONEncoder
+    graphJSON = json.dumps(fig, cls=a)
+    return render_template('cuatroApartados.html', graphJSON=graphJSON)
+
+@app.route('/ej4b')
+def ej4b():
+    fig = go.Figure(data=[
+        go.Bar(name='Cookies', x=dfLegal['Nombre'], y=dfLegal['Cookies'], marker_color='steelblue'),
+        go.Bar(name='Avisos', x=dfLegal['Nombre'], y=dfLegal['Avisos'], marker_color='lightsalmon'),
+        go.Bar(name='Proteccion de datos', x=dfLegal['Nombre'], y=dfLegal['Proteccion de Datos'], marker_color='red')
+    ])
+    # Change the bar mode
+    fig.update_layout(title_text="Cinco Peores", title_font_size=41, barmode='group')
+    a = plotly.utils.PlotlyJSONEncoder
+    graphJSON = json.dumps(fig, cls=a)
+    return render_template('cuatroApartados.html', graphJSON=graphJSON)
+
+@app.route('/ej4c')
+def ej4c():
+    labels = ['Vulnerables', 'No Vulnerables']
+    values = [dfConexiones.at[0, 'Vulnerables'], dfConexiones.at[0, 'No Vulnerables']]
+    fig = go.Figure(data=[
+        go.Pie(labels=labels, values=values)])
+    a = plotly.utils.PlotlyJSONEncoder
+    graphJSON = json.dumps(fig, cls=a)
+    return render_template('cuatroApartados.html', graphJSON=graphJSON)
+
+@app.route('/ej4d')
+def ej4d():
+    fig = go.Figure(data=[
+        go.Bar(name='Se cumple', x=dfPrivacidad['Creacion'], y=dfPrivacidad['Se cumple'], marker_color='steelblue'),
+        go.Bar(name='No se cumple', x=dfPrivacidad['Creacion'], y=dfPrivacidad['No se cumple'], marker_color='lightsalmon')
+    ])
+    # Change the bar mode
+    fig.update_layout(title_text="Comparativa Privacidad segun el Año de Creación", title_font_size=41, barmode='stack')
+    a = plotly.utils.PlotlyJSONEncoder
+    graphJSON = json.dumps(fig, cls=a)
+    return render_template('cuatroApartados.html', graphJSON=graphJSON)
+
+@app.route('/ej4e')
+def ej4e():
+    labels = ['No Comprometidas', 'Comprometidas']
+    values = [dfVulnerable.at[0, 'No Comprometidas'], dfVulnerable.at[0, 'Comprometidas']]
+    fig = go.Figure(data=[
+        go.Pie(labels=labels, values=values)])
+    a = plotly.utils.PlotlyJSONEncoder
+    graphJSON = json.dumps(fig, cls=a)
+    return render_template('cuatroApartados.html', graphJSON=graphJSON)
+
+
+### define a method
+def charts(self):
+        self.set_xy(40.0,25.0)
+        self.image(plt,  link='', type='', w=700/5, h=450/5)
+
+
+if __name__ == '__main__':
+    app.run()
 
