@@ -387,3 +387,58 @@ def topUssersCrit():
     pdf.output('static/topUsuariosCriticos.pdf', 'F')
     con.close()
     return render_template('topUsuariosCriticos.html', graphJSONUno=graphJSONUno)
+
+
+@app.route('/topPaginasVulnerables.html', methods=["GET","POST"])
+def topWebsVuln():
+    num = request.form.get('numero', default=10)
+    if (num == ''):
+        num = 10
+    df_topWebs =pandas.DataFrame()
+
+    con = sqlite3.connect('PRACTICA1.DB')
+    cursor = con.cursor()
+
+    query = """SELECT nombrel,cookies,aviso,proteccionDatos FROM legal ORDER BY politicas LIMIT (?)"""
+    cursor.execute(query, (num,))
+    rows = cursor.fetchall()
+    nombre = []
+    cookies = []
+    avisos = []
+    proteccionDatos = []
+    for i in range(len(rows)):
+        nombre += [rows[i][0]]
+        cookies += [rows[i][1]]
+        avisos += [rows[i][2]]
+        proteccionDatos += [rows[i][3]]
+    df_topWebs['Nombre'] = nombre
+    df_topWebs['Cookies'] = cookies
+    df_topWebs['Avisos'] = avisos
+    df_topWebs['Proteccion de Datos'] = proteccionDatos
+    fig = go.Figure(data=[
+        go.Bar(name='Cookies', x=df_topWebs['Nombre'], y=df_topWebs['Cookies'], marker_color='steelblue'),
+        go.Bar(name='Avisos', x=df_topWebs['Nombre'], y=df_topWebs['Avisos'], marker_color='lightsalmon'),
+        go.Bar(name='Proteccion de datos', x=df_topWebs['Nombre'], y=df_topWebs['Proteccion de Datos'], marker_color='red')
+    ])
+
+    fig.update_layout(title_text="Peores Webs", title_font_size=41, barmode='group')
+    a = plotly.utils.PlotlyJSONEncoder
+    graphJSON = json.dumps(fig, cls=a)
+    pdf = PDF(orientation='P', unit='mm', format='A4')
+    pdf.add_page()
+    pdf_w = 210
+    pdf_h = 297
+    plotly.io.write_image(fig, file='pltx.png', format='png', width=700, height=450)
+    pltx = (os.getcwd() + '/' + "pltx.png")
+    pdf.set_xy(40.0, 25.0)
+    pdf.image(pltx, link='', type='', w=700 / 5, h=450 / 5)
+    pdf.set_font('Arial', '', 12)
+    pdf.set_text_color(0,0,0)
+    txt="Se muestra el grafico de las paginas web mas vulnerables. " \
+        "En el eje X se ven los nombres de las paginas web. El eje Y muestra que si esta a 0 la politica no esta activada y en caso de que esté a 1, está activada. "
+    pdf.set_xy(10.0, 140.0)
+    pdf.multi_cell(w=0, h=10, txt=txt,align='L')
+    pdf.output('static/topPaginasVulnerables.pdf', 'F')
+    return render_template('topPaginasVulnerables.html', graphJSON=graphJSON)
+
+
