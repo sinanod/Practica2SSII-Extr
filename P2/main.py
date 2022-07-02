@@ -457,7 +457,7 @@ def ej4a():
     fig = px.bar(dfCritico, x=dfCritico['Nombre'], y=dfCritico['Probabilidad de Click'])
     a = plotly.utils.PlotlyJSONEncoder
     graphJSON = json.dumps(fig, cls=a)
-    return render_template('cuatroApartados.html', graphJSON=graphJSON)
+    return render_template('ejercicio4.html', graphJSON=graphJSON)
 
 @app.route('/ej4b')
 def ej4b():
@@ -470,7 +470,7 @@ def ej4b():
     fig.update_layout(title_text="Cinco Peores", title_font_size=41, barmode='group')
     a = plotly.utils.PlotlyJSONEncoder
     graphJSON = json.dumps(fig, cls=a)
-    return render_template('cuatroApartados.html', graphJSON=graphJSON)
+    return render_template('ejercicio4.html', graphJSON=graphJSON)
 
 @app.route('/ej4c')
 def ej4c():
@@ -480,7 +480,7 @@ def ej4c():
         go.Pie(labels=labels, values=values)])
     a = plotly.utils.PlotlyJSONEncoder
     graphJSON = json.dumps(fig, cls=a)
-    return render_template('cuatroApartados.html', graphJSON=graphJSON)
+    return render_template('ejercicio4.html', graphJSON=graphJSON)
 
 @app.route('/ej4d')
 def ej4d():
@@ -492,7 +492,7 @@ def ej4d():
     fig.update_layout(title_text="Comparativa Privacidad segun el Año de Creación", title_font_size=41, barmode='stack')
     a = plotly.utils.PlotlyJSONEncoder
     graphJSON = json.dumps(fig, cls=a)
-    return render_template('cuatroApartados.html', graphJSON=graphJSON)
+    return render_template('ejercicio4.html', graphJSON=graphJSON)
 
 @app.route('/ej4e')
 def ej4e():
@@ -502,7 +502,7 @@ def ej4e():
         go.Pie(labels=labels, values=values)])
     a = plotly.utils.PlotlyJSONEncoder
     graphJSON = json.dumps(fig, cls=a)
-    return render_template('cuatroApartados.html', graphJSON=graphJSON)
+    return render_template('ejercicio4.html', graphJSON=graphJSON)
 
 
 ### define a method
