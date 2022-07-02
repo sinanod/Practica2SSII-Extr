@@ -341,3 +341,49 @@ def register():
 
     return render_template("register.html")
 
+@app.route('/topUsuariosCriticos.html', methods=["GET","POST"])
+def topUssersCrit():
+    num = request.form.get('numero', default=10)
+    probNum = request.form.get('porcentaje',default='0')
+    if(num==''):
+        num = 10
+    df_critico = pandas.DataFrame()
+
+    con = sqlite3.connect('PRACTICA1.DB')
+    cursor = con.cursor()
+
+    if(probNum == '0'):
+        query = """SELECT nombre,probClick FROM users where passVul=1 ORDER BY probClick DESC LIMIT (?)"""
+    elif(probNum == '1'):
+        query = """SELECT nombre,probClick FROM users where passVul=1 AND probClick>=50 ORDER BY probClick DESC LIMIT (?)"""
+    elif(probNum =='2'):
+        query = """SELECT nombre,probClick FROM users where passVul=1 AND probClick<50 ORDER BY probClick DESC LIMIT (?)"""
+
+    cursor.execute(query, (num,))
+    rows = cursor.fetchall()
+    nombre = []
+    prob = []
+    for i in range(len(rows)):
+        nombre += [rows[i][0]]
+        prob += [rows[i][1]]
+    df_critico['Nombre'] = nombre
+    df_critico['Probabilidad de Click'] = prob
+    fig = px.bar(df_critico, x=df_critico['Nombre'], y=df_critico['Probabilidad de Click'])
+    a = plotly.utils.PlotlyJSONEncoder
+    graphJSONUno = json.dumps(fig, cls=a)
+    pdf = PDF(orientation='P', unit='mm', format='A4')
+    pdf.add_page()
+    pdf_w = 210
+    pdf_h = 297
+    plotly.io.write_image(fig, file='pltx.png', format='png', width=700, height=450)
+    pltx = (os.getcwd() + '/' + "pltx.png")
+    pdf.set_xy(40.0, 25.0)
+    pdf.image(pltx, link='', type='', w=700 / 5, h=450 / 5)
+    pdf.set_font('Arial', '', 12)
+    pdf.set_text_color(0, 0, 0)
+    txt = "Se muestra el top de usuarios críticos. En el eje X podemos ver los nombres de los usuarios cuestion. El eje Y representa la probabilidad de que el usuario pulse un correo spam."
+    pdf.set_xy(10.0, 130.0)
+    pdf.multi_cell(w=0, h=10, txt=txt, align='L')
+    pdf.output('static/topUsuariosCriticos.pdf', 'F')
+    con.close()
+    return render_template('topUsuariosCriticos.html', graphJSONUno=graphJSONUno)
