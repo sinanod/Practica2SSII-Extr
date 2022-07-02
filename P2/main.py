@@ -307,3 +307,37 @@ ejercicio4()
 
 con.close()
 
+@app.route('/')
+def index():  # put application's code here
+    return render_template('login.html')
+
+@app.route('/home.html')
+def home():  # put application's code here
+        return render_template("home.html")
+
+users = [["admin","admin"],["user","user"]]
+app.secret_key = "SecretKey"
+
+@app.route('/login.html',methods=["GET","POST"])
+def login():
+    if (request.method == 'POST'):
+        username = request.form.get('username')
+        password = request.form.get('password')
+        for i in range(len(users)):
+            if (users[i][0]==username and users[i][1]==password):
+                session['user'] = username
+                return redirect('/Casa.html')
+
+        return "<h1>Wrong username or password</h1>"
+
+    return render_template("login.html")
+
+@app.route('/register.html',methods=["GET","POST"])
+def register():
+    if (request.method == 'POST'):
+        username = request.form.get('username')
+        password = request.form.get('password')
+        users.append([username,password])
+
+    return render_template("register.html")
+
