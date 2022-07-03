@@ -307,3 +307,7 @@
     min-height: 116px;
   }
 }
+
+input {
+  color: #000000
+}

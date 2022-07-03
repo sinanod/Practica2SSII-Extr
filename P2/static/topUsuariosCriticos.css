@@ -128,3 +128,15 @@
     min-height: 319px;
   }
 }
+
+input {
+  color: #000000
+}
+
+option {
+	color: #000000
+}
+
+select {
+	color: #000000
+}

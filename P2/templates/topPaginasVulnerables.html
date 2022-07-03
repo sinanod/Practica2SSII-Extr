@@ -92,8 +92,27 @@
                 <div class="u-layout-row">
                   <div class="u-container-style u-layout-cell u-left-cell u-right-cell u-size-60 u-layout-cell-1">
                     <div class="u-container-layout u-valign-middle-lg u-valign-middle-md u-valign-middle-xl u-valign-top-sm u-valign-top-xs u-container-layout-1">
-                      <h2 class="u-custom-font u-font-montserrat u-text u-text-default u-text-1" data-animation-name="customAnimationIn" data-animation-duration="2000" data-lang-en="​​Logistics Company">Top páginas vulnerables</h2>
-                    </div>
+						<h2 class="u-custom-font u-font-montserrat u-text u-text-default u-text-1" data-animation-name="customAnimationIn" data-animation-duration="2000" data-lang-en="​​Logistics Company">Top páginas vulnerables</h2>
+						    <div>
+								<form action="" method="post">
+									<label for="numero">TOP X</label>
+									<input type="number" id="numero" name="numero">
+									<input type="submit" id="sendnumber" name="sendnumber">
+									<br>
+								</form>
+								{% if graphJSON %}
+								<div id='chart' class='chart'?></div>
+									<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+									<script type='text/javascript'>
+										var graphs = {{graphJSON | safe}};
+										Plotly.plot('chart',graphs,{});
+									</script>
+								{% endif %}
+								<a href="../static/topPaginasVulnerables.pdf" download>
+								<b>Generar Informe en PDF</b>
+								</a>
+							</div>					
+					</div>
                   </div>
                 </div>
               </div>

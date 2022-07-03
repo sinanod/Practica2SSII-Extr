@@ -3125,6 +3125,10 @@ blockquote.u-text.u-indent-66 {
 .u-text.u-indent-65 ol {
   padding-left: 85px;
 }
+
+input {
+  color: #000000
+}
 .u-form-vertical .u-label-left .u-spacing-65.u-label {
   margin-right: 65px;
 }

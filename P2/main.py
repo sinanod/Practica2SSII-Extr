@@ -31,7 +31,6 @@ def probClick(cliclados, total):
 
 def checkPass(password):
     md5hash = password
-    print("Comprobando"+password)
     try:
         password_list = str(urlopen(
             "https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/Common-Credentials/10-million-password-list-top-1000000.txt").read(),
@@ -52,7 +51,7 @@ def checkPass(password):
 
 con = sqlite3.connect('PRACTICA1.DB')
 cursor = con.cursor()
-cursor.execute("DROP TABLE legal")
+'''cursor.execute("DROP TABLE legal")
 cursor.execute("DROP TABLE users")
 
 cursor.execute(
@@ -83,7 +82,7 @@ for i in dataUsers['usuarios']:
         con.commit()
 
 con.commit()
-
+'''
 dataFrame = pd.DataFrame()
 
 

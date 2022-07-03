@@ -20,6 +20,8 @@
   padding: 30px 0;
 }
 
+<input type="color">
+
 .u-section-1 .u-text-1 {
   font-size: 4.5rem;
   line-height: 1.2;
@@ -98,4 +100,8 @@
   .u-section-1 .u-text-1 {
     font-size: 3rem;
   }
+}
+
+input {
+  color: #000000
 }
