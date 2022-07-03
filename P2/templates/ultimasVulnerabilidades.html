@@ -69,8 +69,13 @@
                 <div class="u-layout-row">
                   <div class="u-container-style u-layout-cell u-left-cell u-right-cell u-size-60 u-layout-cell-1">
                     <div class="u-container-layout u-valign-middle-lg u-valign-middle-md u-valign-middle-xl u-valign-top-sm u-valign-top-xs u-container-layout-1">
-                      <h2 class="u-custom-font u-font-montserrat u-text u-text-default u-text-1" data-animation-name="customAnimationIn" data-animation-duration="2000" data-lang-en="​​Logistics Company">Top páginas vulnerables</h2>
-                    </div>
+						<h2 class="u-custom-font u-font-montserrat u-text u-text-default u-text-1" data-animation-name="customAnimationIn" data-animation-duration="2000" data-lang-en="​​Logistics Company">Últimas vulnerabilidades</h2>
+							<div class="list_vuln">
+								{% if tableHTML %}
+								{{ tableHTML | safe}}
+								{% endif %}
+							</div>
+					</div>
                   </div>
                 </div>
               </div>
@@ -79,13 +84,6 @@
         </div>
       </div>
     </section>
-    
-    <div>
-<div class="list_vuln">
-    {% if tableHTML %}
-        {{ tableHTML | safe}}
-    {% endif %}
-</div>
     
     <section class="u-backlink u-clearfix u-grey-80">
       <a class="u-link" href="https://nicepage.com/website-templates" target="_blank">
