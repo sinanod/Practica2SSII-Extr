@@ -52,7 +52,6 @@ def checkPass(password):
 
 con = sqlite3.connect('PRACTICA1.DB')
 cursor = con.cursor()
-'''
 cursor.execute("DROP TABLE legal")
 cursor.execute("DROP TABLE users")
 
@@ -84,7 +83,7 @@ for i in dataUsers['usuarios']:
         con.commit()
 
 con.commit()
-'''
+
 dataFrame = pd.DataFrame()
 
 
@@ -418,7 +417,7 @@ def topUssersCrit():
     pdf.add_page()
     pdf_w = 210
     pdf_h = 297
-    plotly.io.write_image(fig, file='pltx.png', format='png', width=700, height=450)
+    plotly.io.write_image(fig, file='pltxProbClick.png', format='png', width=700, height=450)
     pltx = (os.getcwd() + '/' + "pltx.png")
     pdf.set_xy(40.0, 25.0)
     pdf.image(pltx, link='', type='', w=700 / 5, h=450 / 5)
@@ -470,8 +469,8 @@ def topWebsVuln():
     pdf.add_page()
     pdf_w = 210
     pdf_h = 297
-    plotly.io.write_image(fig, file='pltx.png', format='png', width=700, height=450)
-    pltx = (os.getcwd() + '/' + "pltx.png")
+    plotly.io.write_image(fig, file='pltxPeoresWebs.png', format='png', width=700, height=450)
+    pltx = (os.getcwd() + '/' + "pltxPeoresWebs.png")
     pdf.set_xy(40.0, 25.0)
     pdf.image(pltx, link='', type='', w=700 / 5, h=450 / 5)
     pdf.set_font('Arial', '', 12)
