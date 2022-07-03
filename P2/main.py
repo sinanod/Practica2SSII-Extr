@@ -9,6 +9,7 @@ import plotly.express as px
 import plotly.utils
 import plotly.graph_objects as go
 import plotly.express as px
+import requests
 from fpdf import FPDF
 from flask import Flask, render_template, request,redirect, session, app
 from matplotlib import pyplot as plt
@@ -327,7 +328,7 @@ def login():
         for i in range(len(users)):
             if (users[i][0]==username and users[i][1]==password):
                 session['user'] = username
-                return redirect('/Casa.html')
+                return redirect('/home.html')
 
         return "<h1>Wrong username or password</h1>"
 
@@ -382,9 +383,8 @@ def topUssersCrit():
     pdf.image(pltx, link='', type='', w=700 / 5, h=450 / 5)
     pdf.set_font('Arial', '', 12)
     pdf.set_text_color(0, 0, 0)
-    txt = "Se muestra el top de usuarios críticos. En el eje X podemos ver los nombres de los usuarios cuestion. El eje Y representa la probabilidad de que el usuario pulse un correo spam."
     pdf.set_xy(10.0, 130.0)
-    pdf.multi_cell(w=0, h=10, txt=txt, align='L')
+    pdf.multi_cell(w=0, h=10, align='L')
     pdf.output('static/topUsuariosCriticos.pdf', 'F')
     con.close()
     return render_template('topUsuariosCriticos.html', graphJSONUno=graphJSONUno)
@@ -435,13 +435,13 @@ def topWebsVuln():
     pdf.image(pltx, link='', type='', w=700 / 5, h=450 / 5)
     pdf.set_font('Arial', '', 12)
     pdf.set_text_color(0,0,0)
-    txt="Se muestra el grafico de las paginas web mas vulnerables. " \
-        "En el eje X se ven los nombres de las paginas web. El eje Y muestra que si esta a 0 la politica no esta activada y en caso de que esté a 1, está activada. "
     pdf.set_xy(10.0, 140.0)
-    pdf.multi_cell(w=0, h=10, txt=txt,align='L')
+    pdf.multi_cell(w=0, h=10, align='L')
     pdf.output('static/topPaginasVulnerables.pdf', 'F')
     return render_template('topPaginasVulnerables.html', graphJSON=graphJSON)
 
+
+@app.route('/ultimasVulnerabilidades.html')
 def ejerCuatro():
     page = requests.get("https://cve.circl.lu/api/last")
     jsons = page.json()
@@ -452,7 +452,7 @@ def ejerCuatro():
         lista2 += [jsons[i]['summary']]
     fig = go.Figure(data=[go.Table(header=dict(values=['Vulnerability','Description']),cells=dict(values=[lista1,lista2]))])
     table = plotly.io.to_html(fig)
-    return render_template('Ultimas10Vulnerabilidades.html',tableHTML=table)
+    return render_template('ultimasVulnerabilidades.html',tableHTML=table)
 
 @app.route('/ej4a')
 def ej4a():
